@@ -8,14 +8,16 @@ fs.readdir(pathToFolder, { withFileTypes: true }, (err, files) => {
     files.forEach((file) => {
       const extname = path.extname(file.name);
       const pathToFile = path.join(__dirname, 'secret-folder', file.name);
-      fs.stat(pathToFile, (err, stats) => {
-        if (err) {
-          console.error(err);
-        }
-        console.log(
-          `${file.name.split('.')[0]} - ${extname.slice(1)} - ${stats.size}`,
-        );
-      });
+      if (!file.isDirectory()) {
+        fs.stat(pathToFile, (err, stats) => {
+          if (err) {
+            console.error(err);
+          }
+          console.log(
+            `${file.name.split('.')[0]} - ${extname.slice(1)} - ${stats.size}`,
+          );
+        });
+      }
     });
   }
 });
